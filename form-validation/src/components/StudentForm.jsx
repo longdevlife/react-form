@@ -42,62 +42,72 @@ export default function StudentForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      style={{ background: "#333", padding: 16, borderRadius: 6 }}
+      className="bg-gray-800 p-6 rounded-lg shadow-md max-w-6xl mx-auto mt-4"
     >
-      <h3 style={{ color: "#fff" }}>Thông tin sinh viên</h3>
-      <div style={{ display: "flex", gap: 16, marginBottom: 8 }}>
-        <div style={{ flex: 1 }}>
-          <label>Mã SV</label>
+      <h3 className="text-white text-xl font-bold mb-4">Thông tin sinh viên</h3>
+      <div className="flex gap-4 mb-2">
+        <div className="flex-1">
+          <label className="block text-white font-medium mb-1">Mã SV</label>
           <input
             name="id"
             value={form.id}
             onChange={handleChange}
-            className="form-input"
+            className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
+              errors.id ? "border-red-500 bg-red-50" : "border-gray-300"
+            }`}
           />
-          {errors.id && <div style={{ color: "red" }}>{errors.id}</div>}
+          {errors.id && (
+            <div className="text-red-500 text-sm mt-1">{errors.id}</div>
+          )}
         </div>
-        <div style={{ flex: 1 }}>
-          <label>Họ tên</label>
+        <div className="flex-1">
+          <label className="block text-white font-medium mb-1">Họ tên</label>
           <input
             name="name"
             value={form.name}
             onChange={handleChange}
-            className="form-input"
+            className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
+              errors.name ? "border-red-500 bg-red-50" : "border-gray-300"
+            }`}
           />
-          {errors.name && <div style={{ color: "red" }}>{errors.name}</div>}
+          {errors.name && (
+            <div className="text-red-500 text-sm mt-1">{errors.name}</div>
+          )}
         </div>
       </div>
-      <div style={{ display: "flex", gap: 16, marginBottom: 8 }}>
-        <div style={{ flex: 1 }}>
-          <label>SĐT</label>
+      <div className="flex gap-4 mb-4">
+        <div className="flex-1">
+          <label className="block text-white font-medium mb-1">SĐT</label>
           <input
             name="phone"
             value={form.phone}
             onChange={handleChange}
-            className="form-input"
+            className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
+              errors.phone ? "border-red-500 bg-red-50" : "border-gray-300"
+            }`}
           />
-          {errors.phone && <div style={{ color: "red" }}>{errors.phone}</div>}
+          {errors.phone && (
+            <div className="text-red-500 text-sm mt-1">{errors.phone}</div>
+          )}
         </div>
-        <div style={{ flex: 1 }}>
-          <label>Email</label>
+        <div className="flex-1">
+          <label className="block text-white font-medium mb-1">Email</label>
           <input
             name="email"
             value={form.email}
             onChange={handleChange}
-            className="form-input"
+            className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
+              errors.email ? "border-red-500 bg-red-50" : "border-gray-300"
+            }`}
           />
-          {errors.email && <div style={{ color: "red" }}>{errors.email}</div>}
+          {errors.email && (
+            <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+          )}
         </div>
       </div>
       <button
         type="submit"
-        style={{
-          background: "#4ade80",
-          color: "#222",
-          padding: "8px 16px",
-          border: 0,
-          borderRadius: 4,
-        }}
+        className="bg-green-400 hover:bg-green-500 text-gray-900 font-semibold px-6 py-2 rounded shadow transition-colors"
       >
         {editing ? "Cập nhật" : "Thêm sinh viên"}
       </button>
@@ -105,11 +115,12 @@ export default function StudentForm() {
         <button
           type="button"
           onClick={() => dispatch(setEditing(null))}
-          style={{ marginLeft: 8 }}
+          className="ml-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
         >
           Huỷ
         </button>
       )}
     </form>
   );
+  // ...
 }
