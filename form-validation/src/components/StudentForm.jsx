@@ -9,6 +9,23 @@ export default function StudentForm() {
   const editing = useSelector((state) => state.students.editing);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  const students = useSelector((state) => state.students.list);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("students");
+    if (saved) {
+      try {
+        const arr = JSON.parse(saved);
+        if (Array.isArray(arr) && arr.length > 0) {
+          arr.forEach((sv) => dispatch(addStudent(sv)));
+        }
+      } catch {}
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("students", JSON.stringify(students));
+  }, [students]);
 
   useEffect(() => {
     if (editing) setForm(editing);
@@ -18,9 +35,18 @@ export default function StudentForm() {
   const validate = () => {
     const newErrors = {};
     if (!form.id) newErrors.id = "Mã SV không được bỏ trống";
+    // Tên phải là chữ
     if (!form.name) newErrors.name = "Họ tên không được bỏ trống";
+    else if (!/^[\p{L} ]+$/u.test(form.name))
+      newErrors.name = "Họ tên chỉ được chứa chữ cái";
+    // SĐT phải là số
     if (!form.phone) newErrors.phone = "SĐT không được bỏ trống";
+    else if (!/^\d+$/.test(form.phone))
+      newErrors.phone = "SĐT chỉ được chứa số";
+    // Email phải đúng định dạng
     if (!form.email) newErrors.email = "Email không được bỏ trống";
+    else if (!/^\S+@\S+\.\S+$/.test(form.email))
+      newErrors.email = "Email không hợp lệ";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -42,7 +68,7 @@ export default function StudentForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gray-800 p-6 rounded-lg shadow-md max-w-6xl mx-auto mt-4"
+      className="bg-gray-800 text-white p-6 rounded-lg shadow-md max-w-6xl mx-auto mt-4"
     >
       <h3 className="text-white text-xl font-bold mb-4">Thông tin sinh viên</h3>
       <div className="flex gap-4 mb-2">
