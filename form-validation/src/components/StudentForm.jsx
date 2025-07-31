@@ -10,6 +10,7 @@ export default function StudentForm() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const students = useSelector((state) => state.students.list);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem("students");
@@ -35,6 +36,9 @@ export default function StudentForm() {
   const validate = () => {
     const newErrors = {};
     if (!form.id) newErrors.id = "Mã SV không được bỏ trống";
+    else if (students.some(sv => sv.id === form.id) && (!editing || editing.id !== form.id)) {
+      newErrors.id = "Mã SV đã tồn tại";
+    }
     // Tên phải là chữ
     if (!form.name) newErrors.name = "Họ tên không được bỏ trống";
     else if (!/^[\p{L} ]+$/u.test(form.name))
@@ -58,11 +62,17 @@ export default function StudentForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    if (editing) dispatch(updateStudent(form));
-    else dispatch(addStudent(form));
+    if (editing) {
+      dispatch(updateStudent(form));
+      setMessage("Cập nhật sinh viên thành công!");
+    } else {
+      dispatch(addStudent(form));
+      setMessage("Thêm sinh viên thành công!");
+    }
     setForm(initialForm);
     setErrors({});
     dispatch(setEditing(null));
+    setTimeout(() => setMessage(""), 2000);
   };
 
   return (
@@ -70,16 +80,22 @@ export default function StudentForm() {
       onSubmit={handleSubmit}
       className="bg-gray-800 text-white p-6 rounded-lg shadow-md max-w-6xl mx-auto mt-4"
     >
+      {message && (
+        <div className="mb-4 p-2 rounded bg-green-100 text-green-800 text-center font-semibold animate-pulse">{message}</div>
+      )}
       <h3 className="text-white text-xl font-bold mb-4">Thông tin sinh viên</h3>
       <div className="flex gap-4 mb-2">
         <div className="flex-1">
           <label className="block text-white font-medium mb-1">Mã SV</label>
           <input
             name="id"
+            autoComplete="off"
             value={form.id}
             onChange={handleChange}
             className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
-              errors.id ? "border-red-500 bg-red-50" : "border-gray-300"
+              errors.id
+                ? "border-red-500 bg-red-50 text-red-900"
+                : "border-gray-300 bg-gray-800 text-white"
             }`}
           />
           {errors.id && (
@@ -90,10 +106,13 @@ export default function StudentForm() {
           <label className="block text-white font-medium mb-1">Họ tên</label>
           <input
             name="name"
+            autoComplete="off"
             value={form.name}
             onChange={handleChange}
             className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
-              errors.name ? "border-red-500 bg-red-50" : "border-gray-300"
+              errors.name
+                ? "border-red-500 bg-red-50 text-red-900"
+                : "border-gray-300 bg-gray-800 text-white"
             }`}
           />
           {errors.name && (
@@ -106,10 +125,13 @@ export default function StudentForm() {
           <label className="block text-white font-medium mb-1">SĐT</label>
           <input
             name="phone"
+            autoComplete="off"
             value={form.phone}
             onChange={handleChange}
             className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
-              errors.phone ? "border-red-500 bg-red-50" : "border-gray-300"
+              errors.phone
+                ? "border-red-500 bg-red-50 text-red-900"
+                : "border-gray-300 bg-gray-800 text-white"
             }`}
           />
           {errors.phone && (
@@ -120,10 +142,13 @@ export default function StudentForm() {
           <label className="block text-white font-medium mb-1">Email</label>
           <input
             name="email"
+            autoComplete="off"
             value={form.email}
             onChange={handleChange}
             className={`w-full px-3 py-2 rounded border focus:outline-none focus:ring-2 focus:ring-green-400 ${
-              errors.email ? "border-red-500 bg-red-50" : "border-gray-300"
+              errors.email
+                ? "border-red-500 bg-red-50 text-red-900"
+                : "border-gray-300 bg-gray-800 text-white"
             }`}
           />
           {errors.email && (

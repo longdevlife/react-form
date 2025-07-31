@@ -45,13 +45,25 @@ export default function StudentTable() {
                 <td className="py-2 px-4">{sv.email}</td>
                 <td className="py-2 px-4 flex gap-2">
                   <button
-                    onClick={() => dispatch(setEditing(sv))}
+                    onClick={() => {
+                      dispatch(setEditing(sv));
+                      // Thông báo sửa (có thể thay bằng toast)
+                      console.log("Chọn sửa sinh viên thành công!");
+                    }}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
                   >
                     Sửa
                   </button>
                   <button
-                    onClick={() => dispatch(removeStudent(sv.id))}
+                    onClick={() => {
+                      if (
+                        window.confirm("Bạn có chắc muốn xoá sinh viên này?")
+                      ) {
+                        dispatch(removeStudent(sv.id));
+                        // Thông báo xoá (có thể thay bằng toast)
+                        console.log("Xoá sinh viên thành công!");
+                      }
+                    }}
                     className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
                   >
                     Xoá
